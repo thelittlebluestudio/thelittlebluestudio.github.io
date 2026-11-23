@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>Squared Up: the breakdown</title>
+<!-- Read-only viewer for a Squared Up share link. Everything shown comes from the part of the link after "#", which the
+     browser never sends to this server; nothing is stored anywhere. Source of truth: squared-up-app/web/v.html, published
+     to thelittlebluestudio.github.io/squared-up/. Format must match snapshot() in www/index.html. -->
+<style>
+:root{--bg:#F4F5F7;--surface:#fff;--surface-2:#EEF0F3;--ink:#101828;--muted:#5D6B82;--line:#E3E6EB;--accent:#2563EB;--pos:#15803D;--neg:#B42318;--hi:#EAF1FF;--hero-fg:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0B0F17;--surface:#151B26;--surface-2:#1E2633;--ink:#F2F4F7;--muted:#98A2B3;--line:#273041;--accent:#6E9BFF;--pos:#4ADE80;--neg:#FF8A80;--hi:#1A2742;--hero-fg:#0B0F17}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+.brand{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+h1{margin:2px 0 0;font-size:28px;line-height:1.15}
+.sub{color:var(--muted);font-size:14px}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);margin-left:4px}
+.hero{background:var(--accent);color:var(--hero-fg);border-radius:20px;padding:18px 20px}
+.hero small{opacity:.85;font-size:13px}.hero div{font-size:34px;font-weight:800;letter-spacing:-.01em}
+.sec{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 2px -6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 14px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.card>.row:first-child,.card>.curh+.row{border-top:0}
+.row.me{background:var(--hi);margin:0 -14px;padding:10px 14px}
+.dot{width:28px;height:28px;border-radius:50%;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.amt{font-weight:700;text-align:right;white-space:nowrap}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+.small{grid-column:2/4;color:var(--muted);font-size:13px;margin-top:-2px}
+.pay{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.pay span{color:var(--muted);font-size:14px}
+.curh{font-size:13px;font-weight:700;color:var(--muted);padding:10px 0 2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:8px 14px;font:inherit;font-size:15px;font-weight:600;min-height:40px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.you{background:var(--surface);border:1.5px solid var(--accent);border-radius:16px;padding:14px;display:grid;gap:6px}
+.you b{font-size:18px}
+.rc h2{font-size:17px;margin:0;display:flex;justify-content:space-between;gap:10px}
+.rc .rsub{color:var(--muted);font-size:13px;padding:2px 0 6px}
+details{border-top:1px solid var(--line);padding:8px 0}
+summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:14px;min-height:32px;display:flex;align-items:center}
+.it{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:6px 0;font-size:14px}
+.it .who{grid-column:1/3;color:var(--muted);font-size:12px}
+.it.mine .who{color:var(--accent);font-weight:600}
+.foot{color:var(--muted);font-size:13px;text-align:center;display:grid;gap:6px;margin-top:8px}
+.foot a{color:var(--accent);font-weight:600}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"><p class="sub">Opening the breakdown…</p></main>
+<script>
+(() => {
+  'use strict';
+  const app = document.getElementById('app');
+  const APP_STORE = 'https://apps.apple.com/app/id6830590775';
+  // Small DOM helpers: every piece of text from the link goes in as text, never as HTML.
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+  const add = (parent, ...kids) => { kids.forEach(k => k && parent.appendChild(k)); return parent; };
+  const str = (v, max = 200) => (typeof v === 'string' ? v : v == null ? '' : String(v)).slice(0, max);
+  const arr = (v, max) => Array.isArray(v) ? v.slice(0, max) : [];
+  const colour = c => /^#[0-9a-f]{6}$/i.test(c) ? c : '#475467';
+
+  function fail(msg) {
+    app.textContent = '';
+    add(app, el('div', 'brand', 'Squared Up'), add(el('div', 'err'), el('h1', '', 'This link is not complete'),
+      el('p', 'sub', msg || 'Part of the link may have been cut off. Ask for it to be sent again.')), footer());
+  }
+  function footer() {
+    const f = el('div', 'foot');
+    add(f, el('div', '', 'Read only. This page was made from the link itself: nothing is stored online.'));
+    const a = el('a', '', 'Squared Up: split bills by what you had. Pay once, no subscription.'); a.href = APP_STORE; a.rel = 'noopener';
+    return add(f, add(el('div'), a));
+  }
+
+  async function unpack(hash) {
+    if (hash.length > 400000) throw new Error('too long');
+    const m = /^#1([zj])([A-Za-z0-9_-]+)$/.exec(hash); if (!m) throw new Error('bad link');
+    const b64 = m[2].replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((m[2].length + 3) % 4);
+    const bin = atob(b64), bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    let raw = bytes;
+    if (m[1] === 'z') {
+      if (!window.DecompressionStream) throw new Error('old browser');
+      const reader = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw')).getReader(), parts = []; let n = 0;
+      for (;;) { const { done, value } = await reader.read(); if (done) break; n += value.length; if (n > 3e6) throw new Error('too big'); parts.push(value); }
+      raw = new Uint8Array(n); let o = 0; parts.forEach(p => { raw.set(p, o); o += p.length; });
+    }
+    const d = JSON.parse(new TextDecoder().decode(raw));
+    if (!d || d.v !== 1) throw new Error('unknown version');
+    return d;
+  }
+
+  function render(d) {
+    const people = arr(d.p, 60).map(p => ({ name: str(Array.isArray(p) ? p[0] : '', 60) || '?', c: colour(Array.isArray(p) ? p[1] : '') }));
+    const P = i => people[i] || { name: '?', c: '#475467' };
+    const initial = n => (Array.from(n.trim())[0] || '?').toUpperCase();
+    const dot = i => { const s = el('span', 'dot', initial(P(i).name)); s.style.background = P(i).c; s.setAttribute('aria-hidden', 'true'); return s; };
+    const groups = arr(d.x, 20), receipts = arr(d.r, 500);
+    const KEY = 'sq.me.' + location.hash.length + '.' + location.hash.slice(-24);   // remembered for this link only
+    let me = null; try { const v = sessionStorage.getItem(KEY); if (v !== null && +v >= 0 && +v < people.length) me = +v; } catch { /* no storage */ }
+
+    const draw = () => {
+      app.textContent = '';
+      const when = /^\d{4}-\d{2}-\d{2}$/.test(d.d) ? new Date(d.d + 'T12:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      const head = el('div');
+      add(head, el('div', 'brand', 'Squared Up'), el('h1', '', 'The breakdown'),
+        add(el('div', 'sub', receipts.length + ' receipt' + (receipts.length === 1 ? '' : 's') + (when ? ' · shared ' + when : '')), el('span', 'badge', 'Read only')));
+      const hero = add(el('div', 'hero'), el('small', '', 'Total'), el('div', '', str(d.h, 40)));
+      add(app, head, hero);
+
+      // Who are you? Picking a name highlights everything about that person.
+      add(app, el('div', 'sec', 'Who are you?'));
+      const chips = el('div', 'chips');
+      people.forEach((p, i) => { const b = el('button', 'chip', p.name); b.type = 'button'; b.style.setProperty('--c', p.c); b.setAttribute('aria-pressed', String(me === i));
+        b.onclick = () => { me = me === i ? null : i; try { if (me === null) sessionStorage.removeItem(KEY); else sessionStorage.setItem(KEY, String(me)); } catch { /* fine */ } draw(); };
+        chips.appendChild(b); });
+      add(app, chips);
+
+      if (me !== null) {   // a short "what this means for you" card
+        const you = add(el('div', 'you'), el('div', 'sub', 'For ' + P(me).name));
+        groups.forEach(g => {
+          const label = str(g.c, 3) ? str(g.c, 3) + ': ' : '';
+          arr(g.m, 100).forEach(m => {
+            if (m[0] === me) add(you, el('b', '', label + 'You pay ' + P(m[1]).name + ' ' + str(m[2], 30)));
+            else if (m[1] === me) add(you, el('b', '', label + P(m[0]).name + ' pays you ' + str(m[2], 30)));
+          });
+          arr(g.o, 100).forEach(o => { if (o[0] === me) add(you, el('b', '', label + 'Your own share comes to ' + str(o[1], 30))); });
+        });
+        if (you.children.length === 1) add(you, el('b', '', 'You don\'t need to pay anyone.'));
+        add(app, you);
+      }
+
+      const anyM = groups.some(g => Array.isArray(g.m)), anyO = groups.some(g => Array.isArray(g.o));
+      if (anyM) {
+        add(app, el('div', 'sec', 'Fewest payments'));
+        const c = el('div', 'card');
+        groups.forEach(g => { if (!Array.isArray(g.m)) return; if (str(g.c, 3)) add(c, el('div', 'curh', str(g.c, 3)));
+          const ms = arr(g.m, 100);
+          if (!ms.length) add(c, add(el('div', 'row'), el('span'), el('span', 'sub', 'Everyone is square.'), el('span')));
+          ms.forEach(m => { const r = el('div', 'row' + (me !== null && (m[0] === me || m[1] === me) ? ' me' : ''));
+            add(r, dot(m[0]), add(el('div', 'pay'), el('b', '', P(m[0]).name), el('span', '', 'pays'), el('b', '', P(m[1]).name)), el('span', 'amt', str(m[2], 30))); c.appendChild(r); }); });
+        add(app, c);
+        add(app, el('div', 'sec', 'Balances'));
+        const b = el('div', 'card');
+        groups.forEach(g => { if (!Array.isArray(g.b)) return; if (str(g.c, 3)) add(b, el('div', 'curh', str(g.c, 3)));
+          arr(g.b, 60).forEach(x => { const r = el('div', 'row' + (me === x[0] ? ' me' : ''));
+            add(r, dot(x[0]), el('span', '', P(x[0]).name), el('span', 'amt ' + (x[1] > 0 ? 'pos' : x[1] < 0 ? 'neg' : ''), (x[1] > 0 ? 'gets back ' : x[1] < 0 ? 'owes ' : 'square ') + (x[1] ? str(x[2], 30) : ''))); b.appendChild(r); }); });
+        add(app, b);
+      }
+      if (anyO) {
+        add(app, el('div', 'sec', 'Each person pays their own share'));
+        const c = el('div', 'card');
+        groups.forEach(g => { if (!Array.isArray(g.o)) return; if (str(g.c, 3)) add(c, el('div', 'curh', str(g.c, 3)));
+          arr(g.o, 60).forEach(o => { const r = el('div', 'row' + (me === o[0] ? ' me' : '')); add(r, dot(o[0]), el('span', '', P(o[0]).name), el('span', 'amt', str(o[1], 30))); c.appendChild(r); }); });
+        add(app, c);
+      }
+
+      add(app, el('div', 'sec', receipts.length === 1 ? 'The receipt' : 'Each receipt'));
+      receipts.forEach(rc => {
+        const c = el('div', 'card rc');
+        add(c, add(el('h2'), el('span', '', str(rc.l, 80)), el('span', '', str(rc.t, 30))), el('div', 'rsub', str(rc.w, 300) + (str(rc.e, 30) ? ' · service, tax, discount ' + str(rc.e, 30) : '')));
+        arr(rc.q, 60).forEach(q => { const r = el('div', 'row' + (me === q[0] ? ' me' : ''));
+          add(r, dot(q[0]), el('span', '', P(q[0]).name), el('span', 'amt', str(q[1], 30)), el('div', 'small', str(q[3], 120) + (str(q[2], 160) ? ' · ' + str(q[2], 160) : '')));
+          c.appendChild(r); });
+        const items = arr(rc.i, 500);
+        if (items.length) {
+          const det = el('details'), sum = el('summary', '', 'Items (' + items.length + ')');
+          add(det, sum);
+          const myName = me !== null ? P(me).name : null;
+          items.forEach(it => { const who = str(it[2], 300);
+            const mine = myName && (who === 'everyone' || who.split(', ').some(w => w.replace(/ ×\d+$/, '') === myName));
+            add(det, add(el('div', 'it' + (mine ? ' mine' : '')), el('span', '', str(it[0], 120)), el('span', 'amt', str(it[1], 30)), who ? el('span', 'who', who) : null)); });
+          if (me !== null) det.open = true;
+          add(c, det);
+        }
+        add(app, c);
+      });
+      add(app, footer());
+    };
+    draw();
+  }
+
+  const go = () => unpack(location.hash).then(render).catch(e => fail(e && e.message === 'old browser' ? 'This browser is too old to open the link. Try Safari or Chrome.' : ''));
+  window.addEventListener('hashchange', go);
+  go();
+})();
+</script>
+</body>
+</html>
