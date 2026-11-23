@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<title>Wobble Tower: a dare</title>
+<!-- Dare page for Wobble Tower (The Little Blue Studio). Everything shown comes from the part of the link after "#",
+     which the browser never sends to this server; nothing is stored or tracked. Source of truth:
+     Apps/wobble-tower/web/index.html, published to thelittlebluestudio.github.io/wobble-tower/ with games.js
+     (a copy of Apps/wobble-tower/app/www/games.js: the score is worked out from the run itself, not trusted from the link). -->
+<style>
+:root{--bg:#160f33;--ink:#fff7ee;--muted:#b7aee0;--pink:#ff5c9e;--gold:#ffd23f;--card:#221a4d;--line:#3a2f78}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(#2b1f6e,var(--bg));color:var(--ink);font:17px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+main{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:26px 22px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+img{width:96px;height:96px;border-radius:22px}
+h1{margin:12px 0 0;font-size:34px;line-height:1;font-weight:900;color:var(--gold);text-shadow:2px 2px 0 var(--pink)}
+.who{font-size:22px;font-weight:900;margin:18px 0 4px}
+.who b{color:var(--pink)}
+.big{font-size:64px;font-weight:900;line-height:1;margin:6px 0}
+.sub{color:var(--muted);font-size:15px;margin:6px 0 18px}
+a.b{display:block;text-decoration:none;font-weight:900;border-radius:18px;padding:15px 16px;margin-top:10px;font-size:18px;background:var(--pink);color:#fff}
+.note{font-size:13px;color:var(--muted);margin-top:16px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <img src="icon.png" alt="">
+  <h1>WOBBLE TOWER</h1>
+  <div id="dare" hidden>
+    <div class="who"><b id="name"></b> dares you!</div>
+    <div class="big" id="score"></div>
+    <div class="sub" id="what"></div>
+    <a class="b" id="open" href="#">Open in Wobble Tower</a>
+    <div class="note">Don't have Wobble Tower yet? It isn't in the App Store yet. Keep this link and try again when it's out.</div>
+  </div>
+  <div id="none" hidden>
+    <div class="sub" id="noneText">Tap to drop. Build it tall. Dare your friends.</div>
+    <div class="note">A game from The Little Blue Studio. Coming soon.</div>
+  </div>
+</main>
+<script src="games.js"></script>
+<script>
+'use strict';
+(function () {
+  const $ = id => document.getElementById(id);
+  const raw = location.hash.slice(1);
+  const d = raw && window.DL ? DL.unpackDare(raw) : null;
+  if (!d || d.game !== 'stack') {
+    $('none').hidden = false;
+    if (raw) $('noneText').textContent = "This dare link isn't complete. Ask your friend to send it again.";
+    return;
+  }
+  const run = DL.replay('stack', d.day, d.events);
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d.day);
+  const no = m ? Math.round((Date.UTC(+m[1], m[2] - 1, +m[3]) - Date.UTC(2026, 0, 1)) / 864e5) + 1 : null;
+  $('name').textContent = d.name;
+  $('score').textContent = run.score;
+  $('what').textContent = (run.score === 1 ? 'block' : 'blocks') + ' on tower #' + (no || '?') + '. Can you build it taller?';
+  $('open').href = 'wobbletower://dare#' + raw;
+  $('dare').hidden = false;
+})();
+</script>
+</body>
+</html>
